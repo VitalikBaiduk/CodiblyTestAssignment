@@ -1,16 +1,12 @@
 import { TextField } from "@mui/material";
+import { useAtom } from "jotai";
 import { useState } from "react";
 import { useGetData } from "../../api/useGetData";
 import { GlobalWrapper, HeaderWrapper, StyledAlert } from "../../styles/styles";
 import { ItemDataType } from "../../types/types";
+import { currentItemId, currentPageAtom } from "../../url/urlHandler";
 import { ModalComponent } from "./components/ModalComponent";
 import { TableComponent } from "./components/TableComponent";
-
-import { atomWithHash } from "jotai/utils";
-import { useAtom } from "jotai";
-
-export const currentPageAtom = atomWithHash("page", 0);
-export const currentItemId = atomWithHash("id", "");
 
 export const ListOfProducts = () => {
   const [id, setId] = useAtom(currentItemId);

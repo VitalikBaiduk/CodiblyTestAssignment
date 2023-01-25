@@ -8,14 +8,11 @@ export const StyledPagination = styled(Pagination)`
 export const StyledTableCell = styled(TableCell)`
   width: 33%;
   text-align: left;
-  cursor: pointer;
 `;
 
 export const GlobalWrapper = styled.div`
   width: 100%;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
   cursor: pointer;
 `;
 
