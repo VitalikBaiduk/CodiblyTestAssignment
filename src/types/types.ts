@@ -27,7 +27,7 @@ export type ModalComponentType = {
 export type TableComponentType = {
   data: DataTypes;
   setIsOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setModalData: React.Dispatch<React.SetStateAction<ItemDataType>>;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   error: string;
+  page: number;
 };

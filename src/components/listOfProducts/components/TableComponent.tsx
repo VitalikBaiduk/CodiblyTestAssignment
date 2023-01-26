@@ -5,17 +5,19 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { setModalData } from "../../../redux/actions/setModalData";
+import { useTypedDispatch } from "../../../redux/store";
 import { StyledPagination, StyledTableCell } from "../../../styles/styles";
 import { ItemDataType, TableComponentType } from "../../../types/types";
 
 export const TableComponent = ({
   data,
   setIsOpenModal,
-  setModalData,
   setPage,
   error,
+  page,
 }: TableComponentType) => {
-  const urlPage = window.location.hash[6];
+  const dispatch = useTypedDispatch();
 
   return (
     <TableContainer>
@@ -28,28 +30,27 @@ export const TableComponent = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {data &&
-            data.data.map((item: ItemDataType) => (
-              <TableRow
-                onClick={() => {
-                  setIsOpenModal(true);
-                  setModalData(item);
-                }}
-                sx={{ backgroundColor: item.color }}
-                key={item.id}
-              >
-                <StyledTableCell>{item.id}</StyledTableCell>
-                <StyledTableCell>{item.name}</StyledTableCell>
-                <StyledTableCell>{item.year}</StyledTableCell>
-              </TableRow>
-            ))}
+          {data.data.map((item: ItemDataType) => (
+            <TableRow
+              onClick={() => {
+                setIsOpenModal(true);
+                dispatch(setModalData(item));
+              }}
+              sx={{ backgroundColor: item.color }}
+              key={item.id}
+            >
+              <StyledTableCell>{item.id}</StyledTableCell>
+              <StyledTableCell>{item.name}</StyledTableCell>
+              <StyledTableCell>{item.year}</StyledTableCell>
+            </TableRow>
+          ))}
         </TableBody>
-        {data && error.length <= 2 && data.data.length > 1 && (
+        {error.length <= 2 && data.data.length > 1 && (
           <StyledPagination
             onChange={(event: React.ChangeEvent<unknown>, page: number) =>
               setPage(page)
             }
-            page={+urlPage}
+            page={page}
             count={data.total_pages}
           />
         )}

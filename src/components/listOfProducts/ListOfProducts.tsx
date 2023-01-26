@@ -1,29 +1,46 @@
 import { TextField } from "@mui/material";
 import { useAtom } from "jotai";
-import { useState } from "react";
-import { useGetData } from "../../api/useGetData";
-import { GlobalWrapper, HeaderWrapper, StyledAlert } from "../../styles/styles";
-import { ItemDataType } from "../../types/types";
+import { useEffect, useState } from "react";
+import { setError } from "../../redux/actions/setError";
+import { fetchData } from "../../redux/asyncAction/data";
+import { useTypedDispatch, useTypedSelector } from "../../redux/store";
+import {
+  GlobalWrapper,
+  HeaderWrapper,
+  StyledAlert,
+  StyledCircularProgress,
+} from "../../styles/styles";
+
 import { currentItemId, currentPageAtom } from "../../url/urlHandler";
 import { ModalComponent } from "./components/ModalComponent";
 import { TableComponent } from "./components/TableComponent";
 
 export const ListOfProducts = () => {
   const [id, setId] = useAtom(currentItemId);
-  const [isOpenModal, setIsOpenModal] = useState(false);
-  const [error, setError] = useState("");
-  const [modalData, setModalData] = useState<ItemDataType>({} as ItemDataType);
   const [page, setPage] = useAtom(currentPageAtom);
-  const data = useGetData(page, id, setError);
+
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
+  const data = useTypedSelector((state) => state.mainDataReducer.data);
+  const error = useTypedSelector((state) => state.mainDataReducer.error);
+  const modalData = useTypedSelector(
+    (state) => state.mainDataReducer.modalData
+  );
+
+  const dispatch = useTypedDispatch();
+
+  useEffect(() => {
+    dispatch(fetchData(page, id));
+  }, [page, id, dispatch]);
 
   const handleClose = () => {
     if (error.length > 2) {
-      setError("");
+      dispatch(setError(""));
       setId("");
     }
   };
 
-  return (
+  return Object.keys(data).length > 0 ? (
     <GlobalWrapper onClick={handleClose}>
       <HeaderWrapper>
         {error.length > 0 && (
@@ -36,7 +53,7 @@ export const ListOfProducts = () => {
           value={id}
           onChange={(event) => {
             setId(event.currentTarget.value.replace(/[^\d.]/g, ""));
-            setError("");
+            dispatch(setError(""));
           }}
           helperText={"Only numbers"}
           type={"text"}
@@ -48,9 +65,9 @@ export const ListOfProducts = () => {
         <TableComponent
           data={data}
           setIsOpenModal={setIsOpenModal}
-          setModalData={setModalData}
           setPage={setPage}
           error={error}
+          page={page}
         />
       )}
       <ModalComponent
@@ -59,5 +76,7 @@ export const ListOfProducts = () => {
         data={modalData}
       />
     </GlobalWrapper>
+  ) : (
+    <StyledCircularProgress color="inherit" />
   );
 };

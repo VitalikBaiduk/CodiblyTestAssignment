@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Alert, Pagination, TableCell } from "@mui/material";
+import { Alert, CircularProgress, Pagination, TableCell } from "@mui/material";
 
 export const StyledPagination = styled(Pagination)`
   margin-top: 20px;
@@ -47,4 +47,8 @@ export const ModalItem = styled.span`
   &:first-child {
     margin: 0;
   }
+`;
+
+export const StyledCircularProgress = styled(CircularProgress)`
+  margin-top: 30px;
 `;
