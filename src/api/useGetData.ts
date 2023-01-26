@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { DataTypes } from "../types/types";
 import axios from "axios";
 
+/* This is not used at the moment, as the request is handled by Redux.
+But this is a fully working option that can be used without using Redux.*/
+
 export const useGetData = (
   page: number,
   id: string,
@@ -20,7 +23,7 @@ export const useGetData = (
         setError(error.message ? error.message : "Something went wrong!");
       }
     })();
-  }, [page, id]);
+  }, [page, id, setError]);
 
   return data as unknown as DataTypes;
 };
